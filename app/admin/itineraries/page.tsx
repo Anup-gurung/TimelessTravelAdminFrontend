@@ -682,7 +682,6 @@ export default function ItinerariesPage() {
                     type="date"
                     value={formData.start_date || ""}
                     onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
-                    required
                     className="border-black focus-visible:ring-black"
                   />
                 </div>
@@ -696,7 +695,6 @@ export default function ItinerariesPage() {
                     type="date"
                     value={formData.end_date || ""}
                     onChange={(e) => setFormData({ ...formData, end_date: e.target.value })}
-                    required
                     className="border-black focus-visible:ring-black"
                   />
                 </div>
