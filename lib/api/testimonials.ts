@@ -1,4 +1,4 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_URL || "http://localhost:5000/api"
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://timelesstravelbackend.onrender.com/api"
 
 export interface Testimonial {
   _id?: string

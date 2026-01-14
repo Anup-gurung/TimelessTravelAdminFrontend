@@ -24,16 +24,25 @@ export default function LoginPage() {
     setError("")
     setSuccess("")
 
+    console.log("🔐 Login attempt started")
+    console.log("📧 Email:", email)
+    console.log("🌐 API URL from env:", process.env.NEXT_PUBLIC_API_URL)
+
     try {
+      console.log("🚀 Calling signIn with credentials...")
       const result = await signIn("credentials", {
         email,
         password,
         redirect: false,
       })
 
+      console.log("📥 SignIn result:", result)
+
       if (result?.error) {
+        console.error("❌ Login error:", result.error)
         setError(result.error)
       } else if (result?.ok) {
+        console.log("✅ Login successful!")
         setSuccess("Login successful! Redirecting...")
         setTimeout(() => {
           router.push("/admin")
@@ -41,9 +50,11 @@ export default function LoginPage() {
         }, 1000)
       }
     } catch (err) {
+      console.error("💥 Exception during login:", err)
       setError(err instanceof Error ? err.message : "An error occurred during login")
     } finally {
       setIsLoading(false)
+      console.log("🏁 Login attempt finished")
     }
   }
 

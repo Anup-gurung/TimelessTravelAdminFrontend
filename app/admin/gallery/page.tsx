@@ -80,10 +80,6 @@ export default function GalleryPage() {
       setError("Please select an image file")
       return
     }
-    if (!formData.place_name || formData.place_name.trim() === "") {
-      setError("Please enter a place name")
-      return
-    }
 
     setIsLoading(true)
     setError("")
@@ -210,13 +206,12 @@ export default function GalleryPage() {
             )}
 
             <div className="space-y-2">
-              <Label htmlFor="place_name">Place Name</Label>
+              <Label htmlFor="place_name">Place Name (Optional)</Label>
               <Input
                 id="place_name"
                 value={formData.place_name || ""}
                 onChange={(e) => setFormData({ ...formData, place_name: e.target.value })}
                 placeholder="e.g., Bali Beach, Mount Fuji"
-                required
               />
               <p className="text-xs text-muted-foreground">Add a location or description for this image</p>
             </div>

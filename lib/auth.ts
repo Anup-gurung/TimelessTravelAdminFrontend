@@ -10,43 +10,66 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
+        console.log("🔑 authorize() called")
+        console.log("📋 Credentials received:", { email: credentials?.email, hasPassword: !!credentials?.password })
+        
         if (!credentials?.email || !credentials?.password) {
+          console.error("❌ Missing credentials")
           throw new Error("Email and password are required")
         }
 
         try {
           // Call your backend API
-          const API_URL = process.env.NEXT_PUBLIC_URL || "http://localhost:5000/api"
-          const response = await fetch(`${API_URL}/auth/login`, {
+          const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://timelesstravelbackend.onrender.com/api"
+          const loginUrl = `${API_URL}/auth/login`
+          console.log("🌐 API_URL:", API_URL)
+          console.log("🎯 Attempting login to:", loginUrl)
+          
+          const response = await fetch(loginUrl, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
+            mode: "cors",
+            credentials: "omit",
             body: JSON.stringify({
               email: credentials.email,
               password: credentials.password,
             }),
           })
 
+          console.log("📡 Response status:", response.status)
+          console.log("📡 Response ok:", response.ok)
+
           const data = await response.json()
+          console.log("📦 Response data:", data)
 
           if (!response.ok) {
+            console.error("❌ Login failed:", data.message)
             throw new Error(data.message || "Login failed")
           }
 
           // Return user object if authentication is successful
           if (data.token) {
-            return {
+            console.log("✅ Authentication successful, returning user object")
+            const user = {
               id: data.user?.id || data.id || "1",
               email: data.user?.email || credentials.email,
               name: data.user?.name || data.name,
               token: data.token,
             }
+            console.log("👤 User object:", user)
+            return user
           }
 
+          console.warn("⚠️ No token in response, returning null")
           return null
         } catch (error) {
-          console.error("Auth error:", error)
+          console.error("💥 Auth error:", error)
+          if (error instanceof Error) {
+            console.error("💥 Error message:", error.message)
+            console.error("💥 Error stack:", error.stack)
+          }
           throw new Error(error instanceof Error ? error.message : "Authentication failed")
         }
       },

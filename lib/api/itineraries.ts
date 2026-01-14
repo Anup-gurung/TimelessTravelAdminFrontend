@@ -1,4 +1,4 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_URL || "http://localhost:5000/api"
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://timelesstravelbackend.onrender.com/api"
 
 export interface DayItinerary {
   _id?: string
@@ -53,6 +53,8 @@ export const itinerariesApi = {
       const response = await fetch(`${API_BASE_URL}/itineraries`, {
         method: "GET",
         headers,
+        mode: "cors",
+        credentials: "omit",
       })
 
       if (!response.ok) {
