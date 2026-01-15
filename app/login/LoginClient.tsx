@@ -1,59 +1,63 @@
-"use client";
+"use client"
 
-import type React from "react";
-import { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { signIn } from "next-auth/react";
+import type React from "react"
+import { useState } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
+import { signIn } from "next-auth/react"
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 
 export default function LoginClient() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
+  const router = useRouter()
+  const searchParams = useSearchParams()
 
-  const callbackUrl = searchParams.get("callbackUrl") || "/admin";
+  const callbackUrl = searchParams.get("callbackUrl") || "/admin"  // ✅ read from URL
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState("")
+  const [success, setSuccess] = useState("")
 
   const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError("");
-    setSuccess("");
+    e.preventDefault()
+    setIsLoading(true)
+    setError("")
+    setSuccess("")
 
     try {
       const result = await signIn("credentials", {
         email,
         password,
         redirect: false,
-        callbackUrl,
-      });
+        callbackUrl, // ✅ IMPORTANT: updates next-auth callback-url cookie too
+      })
 
+      console.log("SignIn result:", result)
       if (result?.error) {
-        setError(result.error);
-        return;
+        setError(result.error)
+        return
       }
 
       if (result?.ok) {
-        setSuccess("Login successful! Redirecting...");
-        const destination = result?.url || callbackUrl;
+        setSuccess("Login successful! Redirecting...")
 
-        router.replace(destination);
-        router.refresh();
+        // ✅ Use the returned URL if available, else fallback
+        const destination = result?.url || callbackUrl
+        console.log("Redirecting to:", destination)
+
+        // router.push(destination) 
+    
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred during login");
+      setError(err instanceof Error ? err.message : "An error occurred during login")
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-white px-4">
@@ -116,5 +120,5 @@ export default function LoginClient() {
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }
