@@ -46,10 +46,14 @@ export default function LoginClient() {
         setSuccess("Login successful! Redirecting...")
 
         // ✅ Use the returned URL if available, else fallback
-        const destination = result?.url || callbackUrl
-        console.log("Redirecting to:", destination)
+       const destination = result?.url || callbackUrl;
 
-        router.push(destination) 
+// make it relative (Next router can be picky with absolute URLs)
+const url = new URL(destination, window.location.origin);
+
+// HARD redirect (most reliable on Vercel)
+window.location.assign(url.pathname + url.search + url.hash);
+
     
       }
     } catch (err) {
