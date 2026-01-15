@@ -1,16 +1,10 @@
-import { Suspense } from "react"
-import LoginClient from "./LoginClient"
+import { Suspense } from "react";
+import LoginClient from "./LoginClient";
 
-export default function LoginPage() {
+export default function Page() {
   return (
-    <Suspense
-      fallback={
-        <div className="min-h-screen flex items-center justify-center bg-white">
-          <div className="text-black">Loading...</div>
-        </div>
-      }
-    >
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
       <LoginClient />
     </Suspense>
-  )
+  );
 }
