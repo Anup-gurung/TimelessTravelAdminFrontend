@@ -47,8 +47,8 @@ export default function LoginClient() {
         // ✅ Use the returned URL if available, else fallback
         const destination = result?.url || callbackUrl
 
-        router.replace(destination) // replace is better than push here
-        router.refresh()
+        router.push(destination) // replace is better than push here
+    
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred during login")
