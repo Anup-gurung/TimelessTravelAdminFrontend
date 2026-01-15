@@ -36,6 +36,7 @@ export default function LoginClient() {
         callbackUrl, // ✅ IMPORTANT: updates next-auth callback-url cookie too
       })
 
+      console.log("SignIn result:", result)
       if (result?.error) {
         setError(result.error)
         return
@@ -46,8 +47,9 @@ export default function LoginClient() {
 
         // ✅ Use the returned URL if available, else fallback
         const destination = result?.url || callbackUrl
+        console.log("Redirecting to:", destination)
 
-        router.push(destination) // replace is better than push here
+        // router.push(destination) 
     
       }
     } catch (err) {
