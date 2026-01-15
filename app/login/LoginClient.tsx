@@ -49,7 +49,7 @@ export default function LoginClient() {
         const destination = result?.url || callbackUrl
         console.log("Redirecting to:", destination)
 
-        // router.push(destination) 
+        router.push(destination) 
     
       }
     } catch (err) {
