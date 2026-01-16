@@ -93,7 +93,20 @@ export default function ItinerariesPage() {
 
   const handleEdit = (itinerary: Itinerary) => {
     setSelectedItinerary(itinerary)
-    setFormData(itinerary)
+    // Ensure all fields are populated with defaults if missing
+    setFormData({
+      ...itinerary,
+      pricing_tiers: itinerary.pricing_tiers && itinerary.pricing_tiers.length > 0 
+        ? itinerary.pricing_tiers 
+        : [
+            { min_pax: 1, max_pax: 1, price_per_person: itinerary.price || 1500, label: "Solo Traveler" },
+            { min_pax: 2, max_pax: 2, price_per_person: (itinerary.price || 1500) * 0.8, label: "2 Persons" },
+            { min_pax: 3, max_pax: 5, price_per_person: (itinerary.price || 1500) * 0.75, label: "3-5 Persons" },
+            { min_pax: 6, max_pax: 9, price_per_person: (itinerary.price || 1500) * 0.7, label: "6-9 Persons" },
+            { min_pax: 10, max_pax: null, price_per_person: (itinerary.price || 1500) * 0.67, label: "10+ Persons" },
+          ],
+      itinerary_days: itinerary.itinerary_days || [],
+    })
     setCoverImagePreview(itinerary.cover_image_url || "")
     setCoverImageFile(null)
     setIsEditOpen(true)
